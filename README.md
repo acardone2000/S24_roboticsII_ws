@@ -12,7 +12,7 @@ Press the `Fork` on the page and fork the repo to your account. This will create
 On the robot, open a new terminal (via VNC or SSH)
 ```
 cd ~/codes
-git clone https://github.com/YOUR_ACCOUNT/S24_roboticsII_ws.git [team_name]_ws
+git clone https://github.com/acardone2000/S24_roboticsII_ws.git JAX_ws
 ```
 
 ## Building the ROS2 workspace
@@ -20,7 +20,7 @@ The step will build and ROS2 workspace and compile the packages.
 
 **Docker**: Open/access a docker container via a terminal (VNC or SSH)
 ```
-cd ~/codes/[team_name]_ws
+cd ~/codes/JAX_ws
 colcon build
 ```
 
@@ -39,7 +39,7 @@ The reason you don't need to do this while doing previous mini project is that t
 
 **Docker**: Open/access a docker container via a terminal (VNC or SSH)
 ```
-cd ~/codes/[team_name]_ws
+cd ~/codes/JAX_ws
 source install/setup.bash
 ```
 
