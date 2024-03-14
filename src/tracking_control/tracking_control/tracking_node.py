@@ -93,7 +93,7 @@ class TrackingNode(Node):
         # You can decide to filter the detected object pose here
         # For example, you can filter the pose based on the distance from the camera
         # or the height of the object
-        # if np.linalg.norm(center_points) > 3 or center_points[2] > 0.7:
+        #if np.linalg.norm(center_points) > 3 or center_points[2] > 0.7:
         #     return
         
         try:
