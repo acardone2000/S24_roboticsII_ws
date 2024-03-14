@@ -1,3 +1,6 @@
+Authors: Andrew Cardone(acardone2000), Xavier Quiroz(quirox154),Jack Zhong (___)
+
+
 # S24_roboticsII
 ROS2 Workspace for S24 RoboticsII
 
