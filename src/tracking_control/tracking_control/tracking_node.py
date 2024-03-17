@@ -67,6 +67,9 @@ class TrackingNode(Node):
         
         # Current object pose
         self.obj_pose = None
+
+        # Last known object pose
+        self.last_known_obj_pose=None
         
         # ROS parameters
         self.declare_parameter('world_frame_id', 'odom')
@@ -89,8 +92,11 @@ class TrackingNode(Node):
         odom_id = self.get_parameter('world_frame_id').get_parameter_value().string_value
         center_points = np.array([msg.pose.position.x, msg.pose.position.y, msg.pose.position.z])
 
+        # Update the last know pose (non filtered)
+        self.last_known_obj_pos=center_points
+        
         max_distance = 0.3  # the maximimum (limit) distance in meters 
-        max_height = 0.7 # the maximum height (limit) height in meters
+        max_height = 0.7 # the maximum (limit) height in meters
         
         # TODO: Filtering
         # You can decide to filter the detected object pose here
@@ -139,7 +145,7 @@ class TrackingNode(Node):
         if self.obj_pose is None:
             cmd_vel = Twist()
             cmd_vel.linear.x = 0.0
-            cmd_vel.angular.z = 0.0
+            cmd_vel.angular.z = 0.4
             self.pub_control_cmd.publish(cmd_vel)
             return
         
