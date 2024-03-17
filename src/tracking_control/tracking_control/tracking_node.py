@@ -88,13 +88,16 @@ class TrackingNode(Node):
         
         odom_id = self.get_parameter('world_frame_id').get_parameter_value().string_value
         center_points = np.array([msg.pose.position.x, msg.pose.position.y, msg.pose.position.z])
+
+        max_distance = 0.3  # the maximimum (limit) distance in meters 
+        max_height = 0.7 # the maximum height (limit) height in meters
         
         # TODO: Filtering
         # You can decide to filter the detected object pose here
         # For example, you can filter the pose based on the distance from the camera
         # or the height of the object
-        #if np.linalg.norm(center_points) > 3 or center_points[2] > 0.7:
-        #     return
+        if np.linalg.norm(center_points) > max_distance or center_points[2] > max_height :
+             return
         
         try:
             # Transform the center point from the camera frame to the world frame
