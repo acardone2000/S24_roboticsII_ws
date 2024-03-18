@@ -95,7 +95,7 @@ class TrackingNode(Node):
         # Update the last know pose (non filtered)
         self.last_known_obj_pose = center_points
         
-        max_distance = 3  # the maximimum (limit) distance in meters 
+        max_distance = 0.3  # the maximimum (limit) distance in meters 
         max_height = 0.7 # the maximum (limit) height in meters
         
         # TODO: Filtering
