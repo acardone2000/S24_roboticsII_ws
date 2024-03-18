@@ -69,7 +69,7 @@ class TrackingNode(Node):
         self.obj_pose = None
 
         # Last known object pose
-        self.last_known_obj_pose=None
+        self.last_known_obj_pose = None
         
         # ROS parameters
         self.declare_parameter('world_frame_id', 'odom')
