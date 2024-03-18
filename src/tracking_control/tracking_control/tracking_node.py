@@ -184,7 +184,7 @@ class TrackingNode(Node):
         stop_distance = 0.3
 
         #Calculate distance and angle to the object
-        distance = nplinalg.norm(self.obj_pose[:2]) #distance based on x and y mesurments
+        distance = np.linalg.norm(self.obj_pose[:2]) #distance based on x and y mesurments
         angle = math.atan2(self.obj_pose[1], self.obj_pose[0]) #Angle to object
 
         cmd_vel=Twist()
