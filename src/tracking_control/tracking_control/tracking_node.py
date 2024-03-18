@@ -185,14 +185,14 @@ class TrackingNode(Node):
 
         #Calculate distance and angle to the object
         distance = np.linalg.norm(self.obj_pose[:2]) #distance based on x and y mesurments
-        angle = math.atan2(self.obj_pose[1], self.obj_pose[0]) #Angle to object
+        angle = np.atan2(self.obj_pose[1], self.obj_pose[0]) #Angle to object
 
-        cmd_vel=Twist()
+        cmd_vel = Twist()
 
         #Check if we are close enough to stop location
         if distance > stop_distance:
             # Adjust linear velocity based on distance, reduces speed as it gets closer
-            cmd_vel.linear.x=linear_gain *( distance - stop_distance )
+            cmd_vel.linear.x = linear_gain *( distance - stop_distance )
 
             #Adjust angular velocity based on the angle, sharper turn for larger angles
             cmd_vel.angular.z = angular_gain * angle
