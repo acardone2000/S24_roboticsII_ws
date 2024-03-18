@@ -161,6 +161,8 @@ class TrackingNode(Node):
         
         # Get the current object pose in the robot base_footprint frame
         current_object_pose = self.get_current_object_pose()
+        if current_object_pose is None:
+        return
         
         # TODO: get the control velocity command
         cmd_vel = self.controller()
