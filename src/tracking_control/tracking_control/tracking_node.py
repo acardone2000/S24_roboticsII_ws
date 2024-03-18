@@ -93,9 +93,9 @@ class TrackingNode(Node):
         center_points = np.array([msg.pose.position.x, msg.pose.position.y, msg.pose.position.z])
 
         # Update the last know pose (non filtered)
-        self.last_known_obj_pos=center_points
+        self.last_known_obj_pos = center_points
         
-        max_distance = 0.3  # the maximimum (limit) distance in meters 
+        max_distance = 3  # the maximimum (limit) distance in meters 
         max_height = 0.7 # the maximum (limit) height in meters
         
         # TODO: Filtering
