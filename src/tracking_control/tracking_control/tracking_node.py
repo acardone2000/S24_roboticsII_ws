@@ -95,15 +95,15 @@ class TrackingNode(Node):
         # Update the last know pose (non filtered)
         self.last_known_obj_pose = center_points
         
-        max_distance = 0.3  # the maximimum (limit) distance in meters 
-        max_height = 0.7 # the maximum (limit) height in meters
+        #max_distance = 0.3  # the maximimum (limit) distance in meters 
+        #max_height = 0.7 # the maximum (limit) height in meters
         
         # TODO: Filtering
         # You can decide to filter the detected object pose here
         # For example, you can filter the pose based on the distance from the camera
         # or the height of the object
-        if np.linalg.norm(center_points) > max_distance or center_points[2] > max_height :
-             return
+        #if np.linalg.norm(center_points) > max_distance or center_points[2] > max_height :
+             #return
         
         try:
             # Transform the center point from the camera frame to the world frame
