@@ -179,8 +179,8 @@ class TrackingNode(Node):
         
         # TODO: Update the control velocity command
         # Gain parameter
-        linear_gain = 1.2
-        angular_gain = 1.4
+        linear_gain = 0.9
+        angular_gain = 1.1
 
         # Distance treshold
         stop_distance = 0.3
