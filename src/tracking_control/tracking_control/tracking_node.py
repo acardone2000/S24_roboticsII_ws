@@ -132,8 +132,7 @@ class TrackingNode(Node):
             
         except TransformException as e:
             self.get_logger().error('Transform error: ' + str(e))
-            self.obj_pose = None
-            return None
+            return 
         
         return object_pose
     
