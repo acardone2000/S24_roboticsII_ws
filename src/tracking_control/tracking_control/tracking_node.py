@@ -95,7 +95,7 @@ class TrackingNode(Node):
         # Update the last know pose (non filtered)
         self.last_known_obj_pose = center_points
         
-        max_distance = 1  # the maximimum (limit) distance in meters 
+        max_distance = 2 # the maximimum (limit) distance in meters 
         max_height = 0.7 # the maximum (limit) height in meters
         
         # TODO: Filtering
@@ -179,8 +179,8 @@ class TrackingNode(Node):
         
         # TODO: Update the control velocity command
         # Gain parameter
-        linear_gain = 1.5
-        angular_gain = 1.3
+        linear_gain = 1.2
+        angular_gain = 1.4
 
         # Distance treshold
         stop_distance = 0.3
