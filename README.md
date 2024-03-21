@@ -66,3 +66,32 @@ For the new camera model (astra pro plus, Robot 7~)
 ```
 ros2 launch tracking_control car_camera_proplus_bringup_launch.py
 ```
+
+## Robot Teleoeration
+At the terminal that run the teleoperation node, the terminal should show this.
+```
+Control Your Robot!
+Press and hold the keys to move around.
+Press space key to turn on/off tracking.
+---------------------------
+Moving around:
+   u    i    o
+   j    k    l
+   m    ,    .
+
+t/y : turn counterclockwise/clockwise
+k : force stop
+space key : turn on/off tracking
+anything else : stop smoothly
+
+CTRL-C to quit
+```
+
+As the hint suggested, the following function can be done by press and/or hold the key.
+
+- Activate/Deactivate autonomous tracking: press space key
+- Moving linear in a direction: press and hold `u    i    o` (left forward, forward, right forward), `j    l` (left right), `m    ,    .` (left backward, backward, right backward)
+- Turning counterclockwise/clockwise: `t`/`y`
+- Stop the robot: press `k` or anything else
+
+Note that the keyboard teleoperation has higher priority than the autonomous tracking command. In addition, deactivate (press space) the robot if you think the robot is (almost) out of control to protect the robot for potential damages.
