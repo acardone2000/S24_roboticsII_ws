@@ -179,8 +179,8 @@ class TrackingNode(Node):
         
         # TODO: Update the control velocity command
         # Gain parameter
-        linear_gain = 0.9
-        angular_gain = 1.1
+        linear_gain = 1
+        angular_gain = 1
 
         # Distance treshold
         stop_distance = 0.3
@@ -197,7 +197,7 @@ class TrackingNode(Node):
             cmd_vel.linear.x = linear_gain *( distance - stop_distance )
 
             #Adjust angular velocity based on the angle, sharper turn for larger angles
-            cmd_vel.angular.z = angular_gain * angle
+            cmd_vel.angular.z = 0   # angular_gain * angle
         
         else:
             #Stop moving if close enough
