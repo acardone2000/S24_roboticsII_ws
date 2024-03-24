@@ -197,7 +197,7 @@ class TrackingNode(Node):
         angular_gain = angular_gain_base - angular_gain_factor * abs(angle)
 
         linear_gain=max(linear_gain, 0.1)
-        angular_gain = max(anfular, 0.1)
+        angular_gain = max(angular_gain, 0.1)
         
         cmd_vel = Twist()
 
