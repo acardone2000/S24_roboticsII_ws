@@ -182,6 +182,10 @@ class TrackingNode(Node):
         linear_gain = 1
         angular_gain = 1.1
 
+        #Dynamic gain adjustment factor
+        linear_gain_factor = 0.5
+        angular_gain_factor = 0.6
+
         # Distance treshold
         stop_distance = 0.3
 
@@ -189,6 +193,12 @@ class TrackingNode(Node):
         distance = np.linalg.norm(self.obj_pose[:2]) #distance based on x and y mesurments
         angle = math.atan2(self.obj_pose[1], self.obj_pose[0]) #Angle to object
 
+        linear_gain = linear_gain_base -linear_gain_factor * (distance - stop distance)
+        angular_gain = angular_gain_base - angular_gain_factor * abs(angle)
+
+        linear_gain=max(linear_gain, 0.1)
+        angular_gain = max(anfular, 0.1)
+        
         cmd_vel = Twist()
 
         #Check if we are close enough to stop location
