@@ -2,13 +2,36 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist, PoseStamped
 from tf2_ros import TransformException, Buffer, TransformListener
-from filterpy.kalman import KalmanFilter
 import numpy as np
 import math
 
 ## Functions for quaternion and rotation matrix conversion
 ## The code is adapted from the general_robotics_toolbox package
 ## Code reference: https://github.com/rpiRobotics/rpi_general_robotics_toolbox_py
+class SimpleKalmanFilter:
+    def __init__(self, dim_x, dim_z, process_noise, measurement_noise):
+        self.dim_x = dim_x
+        self.dim_z = dim_z
+
+        self.x = np.zeros((dim_x, 1))  # State vector
+        self.F = np.eye(dim_x)         # State transition matrix
+        self.H = np.zeros((dim_z, dim_x))  # Measurement function
+        self.P = np.eye(dim_x) * 1000  # Covariance matrix
+        self.Q = np.eye(dim_x) * process_noise  # Process noise covariance matrix
+        self.R = np.eye(dim_z) * measurement_noise  # Measurement noise covariance matrix
+        self.K = np.zeros((dim_x, dim_z))  # Kalman gain
+
+    def predict(self):
+        self.x = np.dot(self.F, self.x)
+        self.P = np.dot(np.dot(self.F, self.P), self.F.T) + self.Q
+
+    def update(self, z):
+        y = z - np.dot(self.H, self.x)
+        S = np.dot(np.dot(self.H, self.P), self.H.T) + self.R
+        self.K = np.dot(np.dot(self.P, self.H.T), np.linalg.inv(S))
+        self.x = self.x + np.dot(self.K, y)
+        self.P = self.P - np.dot(np.dot(self.K, self.H), self.P)
+
 def hat(k):
     """
     Returns a 3 x 3 cross product matrix for a 3 x 1 vector
@@ -91,7 +114,7 @@ class TrackingNode(Node):
         # Create timer, running at 100Hz
         self.timer = self.create_timer(0.01, self.timer_update)
 
-        self.kf = KalmanFilter(dim_x=4, dim_z=2)
+        self.kf = SimpleKalmanFilter(dim_x=4, dim_z=2, process_noise=1, mesurement_noise=1)
         self.kf.x = np.array([0., 0., 0., 0.])
         self.kf.F = np.array([[ 1, 0, 1, 0],
                               [0, 1, 0, 1],
@@ -139,7 +162,7 @@ class TrackingNode(Node):
         self.kf.predict()
         self.kf.update(z)
 
-        self.obj_pose = self.kf.x[:2]
+        self.obj_pose = self.kf.x[:2].flatten()
         
     def get_current_object_pose(self):
         
