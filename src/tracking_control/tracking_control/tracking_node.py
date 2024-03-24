@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist, PoseStamped
 from tf2_ros import TransformException, Buffer, TransformListener
+from filterpy.kalman import KalmanFilter
 import numpy as np
 import math
 
@@ -70,6 +71,9 @@ class TrackingNode(Node):
 
         # Last known object pose
         self.last_known_obj_pose = None
+
+        selg.linear_gain_base = 1
+        self.angular_gain_base = 1.1
         
         # ROS parameters
         self.declare_parameter('world_frame_id', 'odom')
@@ -85,6 +89,19 @@ class TrackingNode(Node):
     
         # Create timer, running at 100Hz
         self.timer = self.create_timer(0.01, self.timer_update)
+
+        self.kf = KalmanFilter(dim_x=4, dim_z=2)
+        self.kf.x = np.array([0., 0., 0., 0.])
+        self.kf.F = np.array([[ 1, 0, 1, 0],
+                              [0, 1, 0, 1],
+                              [0, 0, 1, 0]
+                              [0, 0, 0, 1]])
+        self.kf.H = np.array([[1, 0, 0, 0],
+                              [0, 1, 0, 0]])
+        self.kf.P *=1000.
+        self.kf.R =np.array(pp1, 0],
+                            [0, 1]])
+        self.kf.Q = np.eye(4)
     
     def detected_obj_pose_callback(self, msg):
         #self.get_logger().info('Received Detected Object Pose')
@@ -116,6 +133,12 @@ class TrackingNode(Node):
         
         # Get the detected object pose in the world frame
         self.obj_pose = cp_world
+
+        z = np.array([msg.pose.position.x, msg.pose.position.y])
+        self.kf.predict()
+        self.kf.update(z)
+
+        selg.obj_pose = self.kf.x[:2]
         
     def get_current_object_pose(self):
         
@@ -178,9 +201,6 @@ class TrackingNode(Node):
         ########### Write your code here ###########
         
         # TODO: Update the control velocity command
-        # Gain parameter
-        linear_gain = 1
-        angular_gain = 1.1
 
         #Dynamic gain adjustment factor
         linear_gain_factor = 0.5
@@ -193,8 +213,8 @@ class TrackingNode(Node):
         distance = np.linalg.norm(self.obj_pose[:2]) #distance based on x and y mesurments
         angle = math.atan2(self.obj_pose[1], self.obj_pose[0]) #Angle to object
 
-        linear_gain = linear_gain_base -linear_gain_factor * (distance - stop distance)
-        angular_gain = angular_gain_base - angular_gain_factor * abs(angle)
+        linear_gain = self.linear_gain_base -linear_gain_factor * (distance - stop distance)
+        angular_gain = self.angular_gain_base - angular_gain_factor * abs(angle)
 
         linear_gain=max(linear_gain, 0.1)
         angular_gain = max(angular_gain, 0.1)
