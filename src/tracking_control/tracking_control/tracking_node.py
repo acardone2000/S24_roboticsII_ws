@@ -94,12 +94,12 @@ class TrackingNode(Node):
         self.kf.x = np.array([0., 0., 0., 0.])
         self.kf.F = np.array([[ 1, 0, 1, 0],
                               [0, 1, 0, 1],
-                              [0, 0, 1, 0]
+                              [0, 0, 1, 0],
                               [0, 0, 0, 1]])
         self.kf.H = np.array([[1, 0, 0, 0],
                               [0, 1, 0, 0]])
         self.kf.P *=1000.
-        self.kf.R =np.array(pp1, 0],
+        self.kf.R =np.array([[1, 0],
                             [0, 1]])
         self.kf.Q = np.eye(4)
     
@@ -138,7 +138,7 @@ class TrackingNode(Node):
         self.kf.predict()
         self.kf.update(z)
 
-        selg.obj_pose = self.kf.x[:2]
+        self.obj_pose = self.kf.x[:2]
         
     def get_current_object_pose(self):
         
