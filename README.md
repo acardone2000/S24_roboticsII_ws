@@ -4,6 +4,8 @@ Authors: Andrew Cardone(acardone2000), Xavier Quiroz(quirox154),Jack Zhong (zhon
 # S24_roboticsII
 ROS2 Workspace for S24 RoboticsII
 
+For robot issues, please refer to [this document](https://www.overleaf.com/read/jckcnqkwytvb#22a42e).
+
 ## Fork the repository
 
 Press the `Fork` on the page and fork the repo to your account. This will create a repository with exact same content in your github account.
@@ -19,6 +21,16 @@ git clone https://github.com/acardone2000/S24_roboticsII_ws.git JAX_ws
 The step will build and ROS2 workspace and compile the packages.
 
 **Docker**: Open/access a docker container via a terminal (VNC or SSH)
+Run a docker container
+```
+./run_docker.sh
+```
+or access (execute) a running docker container
+```
+./exec_docker.sh
+```
+
+Then run this command to build your work space.
 ```
 cd ~/codes/JAX_ws
 colcon build
@@ -62,7 +74,7 @@ For the old camera model (astra pro, Robot 1~6)
 ```
 ros2 launch tracking_control car_camera_pro_bringup_launch.py
 ```
-For the new camera model (astra pro plus, Robot 7~)
+For the new camera model (astra pro plus, Robot 7~). **Unplug and plug** the camera cable if you haven't do so after booting up the robot. The image of the camera cable location is in mini project 2 description.
 ```
 ros2 launch tracking_control car_camera_proplus_bringup_launch.py
 ```
