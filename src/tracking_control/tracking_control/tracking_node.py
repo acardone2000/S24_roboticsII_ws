@@ -114,7 +114,7 @@ class TrackingNode(Node):
         # Create timer, running at 100Hz
         self.timer = self.create_timer(0.01, self.timer_update)
 
-        self.kf = SimpleKalmanFilter(dim_x=4, dim_z=2, process_noise=1, mesurement_noise=1)
+        self.kf = SimpleKalmanFilter(dim_x=4, dim_z=2, process_noise=1, measurement_noise=1)
         self.kf.x = np.array([0., 0., 0., 0.])
         self.kf.F = np.array([[ 1, 0, 1, 0],
                               [0, 1, 0, 1],
@@ -245,9 +245,9 @@ class TrackingNode(Node):
         cmd_vel = Twist()
 
         #Check if we are close enough to stop location
-        if distance > stop_distance:
+        if distance > self.stop_distance:
             # Adjust linear velocity based on distance, reduces speed as it gets closer
-            cmd_vel.linear.x = linear_gain *( distance - stop_distance )
+            cmd_vel.linear.x = linear_gain *( distance - self.stop_distance )
 
             #Adjust angular velocity based on the angle, sharper turn for larger angles
             cmd_vel.angular.z = angular_gain * angle
