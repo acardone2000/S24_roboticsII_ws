@@ -72,7 +72,7 @@ class TrackingNode(Node):
         # Last known object pose
         self.last_known_obj_pose = None
 
-        selg.linear_gain_base = 1
+        self.linear_gain_base = 1
         self.angular_gain_base = 1.1
         self.stop_distance = 0.3
         
