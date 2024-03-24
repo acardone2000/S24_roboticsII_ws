@@ -1,4 +1,4 @@
-import rclpy
+fimport rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist, PoseStamped
 from tf2_ros import TransformException, Buffer, TransformListener
@@ -74,6 +74,7 @@ class TrackingNode(Node):
 
         selg.linear_gain_base = 1
         self.angular_gain_base = 1.1
+        self.stop_distance = 0.3
         
         # ROS parameters
         self.declare_parameter('world_frame_id', 'odom')
@@ -206,14 +207,13 @@ class TrackingNode(Node):
         linear_gain_factor = 0.5
         angular_gain_factor = 0.6
 
-        # Distance treshold
-        stop_distance = 0.3
+       
 
         #Calculate distance and angle to the object
         distance = np.linalg.norm(self.obj_pose[:2]) #distance based on x and y mesurments
         angle = math.atan2(self.obj_pose[1], self.obj_pose[0]) #Angle to object
 
-        linear_gain = self.linear_gain_base -linear_gain_factor * (distance - stop_distance)
+        linear_gain = self.linear_gain_base -linear_gain_factor * (distance - self.stop_distance)
         angular_gain = self.angular_gain_base - angular_gain_factor * abs(angle)
 
         linear_gain=max(linear_gain, 0.1)
