@@ -205,7 +205,7 @@ class TrackingNode(Node):
                 cmd_vel.angular.z = 0.4 * angle_to_last_known_pos / abs(angle_to_last_known_pos) 
             else:
                 # If there is no known last positin, turn in default direction
-                 cmd_vel.angular.z = max(0, cmd_vel.angular.z - 0.1)
+                 cmd_vel.angular.z = max(0.0, cmd_vel.angular.z - 0.1)
                 
             self.pub_control_cmd.publish(cmd_vel)
             return
