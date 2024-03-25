@@ -199,14 +199,13 @@ class TrackingNode(Node):
             cmd_vel.linear.x = 0.0
             #Check if there is last know pose
             if self.last_known_obj_pose is not None:
+                
                 # Determine the direction to turn based on last known position
-                if self.last_known_obj_pose[1]>0:
-                    cmd_vel.angular.z = 0.4 # Turn left
-                else:
-                    cmd_vel.angular.z = -0.4 # Turn right
+                angle_to_last_known_pos = math.atan2(self.last_known_obj_pose[1], self.last_known_obj_pose[0])
+                cmd_vel.angular.z = 0.4 * angle_to_last_known_pos / abs(angle_to_last_known_pos) 
             else:
                 # If there is no known last positin, turn in default direction
-                cmd_vel.angular.z = 0.4
+                 cmd_vel.angular.z = max(0, cmd_vel.angular.z - 0.1)
                 
             self.pub_control_cmd.publish(cmd_vel)
             return
