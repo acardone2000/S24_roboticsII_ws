@@ -94,9 +94,14 @@ class TrackingNode(Node):
 
         # Last known object pose
         self.last_known_obj_pose = None
-
+        
+        #Dyamic linear gain
         self.linear_gain_base = 1
+        
+        #Dynamic angular gain
         self.angular_gain_base = 1.1
+        
+        #stop_distance
         self.stop_distance = 0.3
         
         # ROS parameters
