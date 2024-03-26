@@ -102,7 +102,7 @@ class TrackingNode(Node):
         self.angular_gain_base = 1.1
         
         #stop_distance
-        self.stop_distance = 0.4
+        self.stop_distance = 0.45
         
         # ROS parameters
         self.declare_parameter('world_frame_id', 'odom')
@@ -239,7 +239,7 @@ class TrackingNode(Node):
         # TODO: Update the control velocity command
 
         #Dynamic gain adjustment factor
-        linear_gain_factor = 0.8
+        linear_gain_factor = 0.7
         angular_gain_factor = 1.2
 
        
@@ -249,7 +249,7 @@ class TrackingNode(Node):
         angle = math.atan2(self.obj_pose[1], self.obj_pose[0]) #Angle to object
 
         linear_gain = self.linear_gain_base -linear_gain_factor * (distance - self.stop_distance)
-        angular_gain = self.angular_gain_base + angular_gain_factor * abs(angle)**2
+        angular_gain = self.angular_gain_base + angular_gain_factor * abs(angle)
 
         linear_gain=max(linear_gain, 0.1)
         angular_gain = max(angular_gain, 0.1)
@@ -259,7 +259,7 @@ class TrackingNode(Node):
         #Check if we are close enough to stop location
         if distance > self.stop_distance:
             # Adjust linear velocity based on distance, reduces speed as it gets closer
-            cmd_vel.linear.x = linear_gain *( distance - self.stop_distance )
+            cmd_vel.linear.x = linear_gain * ( distance - self.stop_distance )
 
             #Adjust angular velocity based on the angle, sharper turn for larger angles
             cmd_vel.angular.z = angular_gain * angle
