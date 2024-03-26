@@ -239,8 +239,8 @@ class TrackingNode(Node):
         # TODO: Update the control velocity command
 
         #Dynamic gain adjustment factor
-        linear_gain_factor = 0.7
-        angular_gain_factor = 0.7
+        linear_gain_factor = 0.9
+        angular_gain_factor = 0.9
 
        
 
