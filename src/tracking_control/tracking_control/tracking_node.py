@@ -102,7 +102,7 @@ class TrackingNode(Node):
         self.angular_gain_base = 1
         
         #stop_distance
-        self.stop_distance = 0.3
+        self.stop_distance = 0.4
         
         # ROS parameters
         self.declare_parameter('world_frame_id', 'odom')
@@ -268,6 +268,8 @@ class TrackingNode(Node):
             #Stop moving if close enough
             cmd_vel.linear.x = 0
             cmd_vel.angular.z =0
+
+        
             
         self.get_logger().info(f"Distance: {distance}, Angle: {angle}")
         self.get_logger().info(f"Linear Gain: {linear_gain}, Angular Gain: {angular_gain}")
