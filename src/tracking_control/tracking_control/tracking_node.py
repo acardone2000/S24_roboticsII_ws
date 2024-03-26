@@ -169,6 +169,9 @@ class TrackingNode(Node):
 
         self.obj_pose = self.kf.x[:2].flatten()
         
+        self.get_logger().info(f"Kalman Filter State: {self.kf.x.flatten()}")
+        self.get_logger().info(f"Object Pose: {self.obj_pose}")
+        
     def get_current_object_pose(self):
         
         odom_id = self.get_parameter('world_frame_id').get_parameter_value().string_value
