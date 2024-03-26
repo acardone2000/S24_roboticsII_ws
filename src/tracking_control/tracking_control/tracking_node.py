@@ -246,7 +246,7 @@ class TrackingNode(Node):
         angle = math.atan2(self.obj_pose[1], self.obj_pose[0]) #Angle to object
 
         linear_gain = self.linear_gain_base -linear_gain_factor * (distance - self.stop_distance)
-        angular_gain = self.angular_gain_base - angular_gain_factor * abs(angle)
+        angular_gain = self.angular_gain_base + angular_gain_factor * abs(angle)
 
         linear_gain=max(linear_gain, 0.1)
         angular_gain = max(angular_gain, 0.1)
