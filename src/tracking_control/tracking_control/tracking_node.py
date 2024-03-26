@@ -96,10 +96,10 @@ class TrackingNode(Node):
         self.last_known_obj_pose = None
         
         #Dyamic linear gain
-        self.linear_gain_base = 1
+        self.linear_gain_base = 0.9
         
         #Dynamic angular gain
-        self.angular_gain_base = 0.9
+        self.angular_gain_base = 0.6
         
         #stop_distance
         self.stop_distance = 0.45
