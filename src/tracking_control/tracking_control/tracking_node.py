@@ -240,7 +240,7 @@ class TrackingNode(Node):
 
         #Dynamic gain adjustment factor
         linear_gain_factor = 0.7
-        angular_gain_factor = 1.2
+        angular_gain_factor = 0.9
 
        
 
