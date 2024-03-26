@@ -99,7 +99,7 @@ class TrackingNode(Node):
         self.linear_gain_base = 1
         
         #Dynamic angular gain
-        self.angular_gain_base = 1.1
+        self.angular_gain_base = 0.9
         
         #stop_distance
         self.stop_distance = 0.45
@@ -239,8 +239,8 @@ class TrackingNode(Node):
         # TODO: Update the control velocity command
 
         #Dynamic gain adjustment factor
-        linear_gain_factor = 0.8
-        angular_gain_factor = 1.2
+        linear_gain_factor = 0.5
+        angular_gain_factor = 0.6
 
        
 
