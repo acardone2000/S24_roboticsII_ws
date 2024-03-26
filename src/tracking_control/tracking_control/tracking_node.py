@@ -180,7 +180,12 @@ class TrackingNode(Node):
             robot_world_y = transform.transform.translation.y
             robot_world_z = transform.transform.translation.z
             robot_world_R = q2R([transform.transform.rotation.w, transform.transform.rotation.x, transform.transform.rotation.y, transform.transform.rotation.z])
-            self.obj_pose = np.append(self.obj_pose, 0)  # Append a zero to make it a 3-element vector
+             if len(self.obj_pose) == 2:
+            self.obj_pose = np.append(self.obj_pose, 0)  # Append a zero if it's a 2-element vector
+        elif len(self.obj_pose) > 3:
+            self.obj_pose = self.obj_pose[:3]  # Truncate to 3 elements if it's longer
+
+            
             object_pose = robot_world_R @ self.obj_pose + np.array([robot_world_x, robot_world_y, robot_world_z])
             
         except TransformException as e:
