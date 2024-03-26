@@ -240,7 +240,7 @@ class TrackingNode(Node):
 
         #Dynamic gain adjustment factor
         linear_gain_factor = 0.8
-        angular_gain_factor = 0.8
+        angular_gain_factor = 1.5
 
        
 
@@ -272,6 +272,7 @@ class TrackingNode(Node):
         self.get_logger().info(f"Distance: {distance}, Angle: {angle}")
         self.get_logger().info(f"Linear Gain: {linear_gain}, Angular Gain: {angular_gain}")
         self.get_logger().info(f"Command Velocity - Linear: {cmd_vel.linear.x}, Angular: {cmd_vel.angular.z}")
+        self.get_logger().info(f"Angular Gain Factor: {angular_gain_factor}, Angle: {angle}, Angular Gain: {angular_gain}")
         
         return cmd_vel
     
