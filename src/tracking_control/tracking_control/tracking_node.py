@@ -96,7 +96,7 @@ class TrackingNode(Node):
         self.last_known_obj_pose = None
         
         #Dyamic linear gain
-        self.linear_gain_base = 0.7
+        self.linear_gain_base = 1.1
         
         #Dynamic angular gain
         self.angular_gain_base = 0.9
@@ -239,8 +239,8 @@ class TrackingNode(Node):
         # TODO: Update the control velocity command
 
         #Dynamic gain adjustment factor
-        linear_gain_factor = 1.2
-        angular_gain_factor = 1.4
+        linear_gain_factor = 0.9
+        angular_gain_factor = 0.7
 
        
 
