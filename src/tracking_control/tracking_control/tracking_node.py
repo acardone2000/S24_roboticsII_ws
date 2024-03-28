@@ -99,7 +99,7 @@ class TrackingNode(Node):
         self.linear_gain_base = 0.7
         
         #Dynamic angular gain
-        self.angular_gain_base = 0.5
+        self.angular_gain_base = 0.4
         
         #stop_distance
         self.stop_distance = 0.45
@@ -240,7 +240,7 @@ class TrackingNode(Node):
 
         #Dynamic gain adjustment factor
         linear_gain_factor = 0.5
-        angular_gain_factor = 0.3
+        angular_gain_factor = 0.2
 
        
 
