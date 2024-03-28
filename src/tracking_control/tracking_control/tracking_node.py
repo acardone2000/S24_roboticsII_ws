@@ -99,10 +99,10 @@ class TrackingNode(Node):
         self.linear_gain_base = 0.5
         
         #Dynamic angular gain
-        self.angular_gain_base = 0.4
+        self.angular_gain_base = 0.5
         
         #stop_distance
-        self.stop_distance = 0.45
+        self.stop_distance = 0.5
         
         # ROS parameters
         self.declare_parameter('world_frame_id', 'odom')
