@@ -96,10 +96,10 @@ class TrackingNode(Node):
         self.last_known_obj_pose = None
         
         #Dyamic linear gain
-        self.linear_gain_base = 0.8
+        self.linear_gain_base = 0.7
         
         #Dynamic angular gain
-        self.angular_gain_base = 0.7
+        self.angular_gain_base = 0.6
         
         #stop_distance
         self.stop_distance = 0.45
@@ -210,7 +210,7 @@ class TrackingNode(Node):
                 
                 # Determine the direction to turn based on last known position
                 angle_to_last_known_pos = math.atan2(self.last_known_obj_pose[1], self.last_known_obj_pose[0])
-                cmd_vel.angular.z = 0.4 * angle_to_last_known_pos / abs(angle_to_last_known_pos) 
+                cmd_vel.angular.z = 0.3 * angle_to_last_known_pos / abs(angle_to_last_known_pos) 
             else:
                 # If there is no known last positin, turn in default direction
                  cmd_vel.angular.z = max(0.0, cmd_vel.angular.z - 0.1)
