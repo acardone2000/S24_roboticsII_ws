@@ -99,10 +99,10 @@ class TrackingNode(Node):
         self.linear_gain_base = 0.7
         
         #Dynamic angular gain
-        self.angular_gain_base = 0.7
+        self.angular_gain_base = 1.3
         
         #stop_distance
-        self.stop_distance = 0.45
+        self.stop_distance = 0.6
         
         # ROS parameters
         self.declare_parameter('world_frame_id', 'odom')
@@ -239,8 +239,8 @@ class TrackingNode(Node):
         # TODO: Update the control velocity command
 
         #Dynamic gain adjustment factor
-        linear_gain_factor = 0.4
-        angular_gain_factor = 0.5
+        linear_gain_factor = 1.2
+        angular_gain_factor = 1.4
 
        
 
