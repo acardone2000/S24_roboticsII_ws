@@ -2,7 +2,7 @@
 
 # Team JAX
 
-## Authors: Andrew Cardone(acardone2000), Xavier Quiroz(quirox154),Jack Zhong (zhongj5)
+** Authors: Andrew Cardone(acardone2000), Xavier Quiroz(quirox154),Jack Zhong (zhongj5) **
 
 
 # S24_roboticsII
@@ -56,7 +56,8 @@ The [package_name] are for example, `object_detection`, `tracking_control`.
 ## Activate ROS2 environment
 Activate ROS2 environment to run ROS software
 
-**Important**: You have to activate ROS2 environment **EVERYTIME** you open a new terminal and run/access the docker container.
+[!IMPORTANT]
+You have to activate ROS2 environment **EVERYTIME** you open a new terminal and run/access the docker container.
 
 The reason you don't need to do this while doing previous mini project is that there's an ROS activation command in `/root/.bashrc` in the docker container. Whenever a terminal is launched, it will exected this bash script once.
 
