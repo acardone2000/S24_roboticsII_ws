@@ -1,4 +1,4 @@
-Authors: Andrew Cardone(acardone2000), Xavier Quiroz(quirox154),Jack Zhong (zhongj5)
+# Authors: Andrew Cardone(acardone2000), Xavier Quiroz(quirox154),Jack Zhong (zhongj5)
 
 
 # S24_roboticsII
