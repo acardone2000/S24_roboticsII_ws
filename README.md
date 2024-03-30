@@ -1,5 +1,5 @@
 
-<p align="middle"># Team JAX</p> 
+<p align="middle">**Team JAX**</p> 
 
 # Team JAX
 
