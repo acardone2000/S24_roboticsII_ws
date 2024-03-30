@@ -16,6 +16,13 @@ On the robot, open a new terminal (via VNC or SSH)
 cd ~/codes
 git clone https://github.com/acardone2000/S24_roboticsII_ws.git JAX_ws
 ```
+## Updating repository 
+**Docker**: Open a terminal and access docker (via VNC or SSH). Remeber to **Activate ROS2 environment**.
+```
+cd ~/codes/JAX_ws
+git pull
+
+```
 
 ## Building the ROS2 workspace
 The step will build and ROS2 workspace and compile the packages.
