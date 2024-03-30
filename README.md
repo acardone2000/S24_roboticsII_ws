@@ -21,7 +21,8 @@ cd ~/codes
 git clone https://github.com/acardone2000/S24_roboticsII_ws.git JAX_ws
 ```
 ## Updating repository 
-**Docker**: Open a terminal and access docker (via VNC or SSH). Remeber to **Activate ROS2 environment**.
+>[!NOTE]
+>**Docker**: Open a terminal and access docker (via VNC or SSH). Remeber to **Activate ROS2 environment**.
 ```
 cd ~/codes/JAX_ws
 git pull
