@@ -111,7 +111,7 @@ class TrackingNode(Node):
         self.angular_last_error = 0.0
         self.angular_sum_error = 0.0
 
-        self.stop_distance = 0.5  # Stop distance from the object
+        self.stop_distance = 0.3  # Stop distance from the object
 
         
         # ROS parameters
@@ -273,10 +273,11 @@ class TrackingNode(Node):
         cmd_vel = Twist()
         cmd_vel.linear.x = max(min(linear_velocity, -1.0), 1.0)  # Limiting max speed
         cmd_vel.angular.z = max(min(angular_velocity, -1.0), 1.0)
-       
-        # self.get_logger().info(f"Distance: {distance}, Angle: {angle}")
+        
+        self.get_logger().info(f"Angular error: {angular_error,}, Target_Angle: {target_angle}, Current Angle: {current_angle}")
+        self.get_logger().info(f"Distance: {distance}, Angle: {angle}")
         # self.get_logger().info(f"Linear Gain: {linear_gain}, Angular Gain: {angular_gain}")
-        #self.get_logger().info(f"Command Velocity - Linear: {cmd_vel.linear.x}, Angular: {cmd_vel.angular.z}")
+        self.get_logger().info(f"Command Velocity - Linear: {cmd_vel.linear.x}, Angular: {cmd_vel.angular.z}")
         #self.get_logger().info(f"Angular Gain Factor: {angular_gain_factor}, Angle: {angle}, Angular Gain: {angular_gain}")
 
         return cmd_vel
