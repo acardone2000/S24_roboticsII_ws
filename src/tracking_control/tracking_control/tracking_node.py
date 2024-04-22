@@ -159,6 +159,7 @@ class TrackingNode(Node):
         # For example, you can filter the pose based on the distance from the camera
         # or the height of the object
         if np.linalg.norm(center_points) > max_distance or center_points[2] > max_height :
+             self.get_logger().info('Object pose is beyond the filter limits.')
              return
         
         try:
@@ -172,6 +173,7 @@ class TrackingNode(Node):
         
         # Get the detected object pose in the world frame
         self.obj_pose = cp_world
+        self.get_logger().info(f'Object pose detected: {self.obj_pose}')
 
         z = np.array([msg.pose.position.x, msg.pose.position.y])
         self.kf.predict()
@@ -213,6 +215,7 @@ class TrackingNode(Node):
         # But, you may want to think about what to do in this case
         # and update the command velocity accordingly
         if self.obj_pose is None:
+            self.get_logger().info('No object pose detected.')
             cmd_vel = Twist()
             cmd_vel.linear.x = 0.0
             #Check if there is last know pose
