@@ -111,10 +111,6 @@ class TrackingNode(Node):
         self.angular_last_error = 0.0
         self.angular_sum_error = 0.0
 
-        # Dynamic gain settings if needed
-        self.linear_gain_base = 0.5
-        self.angular_gain_base = 0.5
-
         self.stop_distance = 0.5  # Stop distance from the object
 
         
@@ -188,38 +184,27 @@ class TrackingNode(Node):
         
     def get_current_object_pose(self):
         
-        if self.obj_pose is None:
-            self.get_logger().info("No object pose available.")
-            return None
-
         odom_id = self.get_parameter('world_frame_id').get_parameter_value().string_value
         # Get the current robot pose
         try:
-         # from base_footprint to odom
+            # from base_footprint to odom
             transform = self.tf_buffer.lookup_transform('base_footprint', odom_id, rclpy.time.Time())
             robot_world_x = transform.transform.translation.x
             robot_world_y = transform.transform.translation.y
             robot_world_z = transform.transform.translation.z
             robot_world_R = q2R([transform.transform.rotation.w, transform.transform.rotation.x, transform.transform.rotation.y, transform.transform.rotation.z])
+            if len(self.obj_pose) == 2:
+                self.obj_pose = np.append(self.obj_pose, 0)  # Append a zero if it's a 2-element vector
+            elif len(self.obj_pose) > 3:
+                self.obj_pose = self.obj_pose[:3]  # Truncate to 3 elements if it's longer
 
-            # Ensure self.obj_pose is a numpy array with at least length 3
-            if isinstance(self.obj_pose, np.ndarray) and self.obj_pose.shape[0] >= 3:
-                obj_pose_3d = self.obj_pose[:3]  # Use only the first three elements
-            else:
-                self.get_logger().error("Object pose is not in expected format.")
-                return None
-            
-            return object_pose
-        
-            object_pose = robot_world_R @ obj_pose_3d + np.array([robot_world_x, robot_world_y, robot_world_z])
+            object_pose = robot_world_R @ self.obj_pose + np.array([robot_world_x, robot_world_y, robot_world_z])
             
         except TransformException as e:
-                self.get_logger().error('Transform error: ' + str(e))
-                return None
+            self.get_logger().error('Transform error: ' + str(e))
+            return 
         
-    
-
-       
+        return object_pose
     
     def timer_update(self):
         ################### Write your code here ###################
@@ -227,29 +212,32 @@ class TrackingNode(Node):
         # Now, the robot stops if the object is not detected
         # But, you may want to think about what to do in this case
         # and update the command velocity accordingly
-        cmd_vel = Twist()
         if self.obj_pose is None:
-            # No current pose available, use last known pose to decide action
+            cmd_vel = Twist()
+            cmd_vel.linear.x = 0.0
+            #Check if there is last know pose
             if self.last_known_obj_pose is not None:
-                # Rotate towards the last known position
+                
+                # Determine the direction to turn based on last known position
                 angle_to_last_known_pos = math.atan2(self.last_known_obj_pose[1], self.last_known_obj_pose[0])
-                cmd_vel.angular.z = 0.3 * angle_to_last_known_pos / abs(angle_to_last_known_pos) if angle_to_last_known_pos != 0 else 0.3
+                cmd_vel.angular.z = 0.3 * angle_to_last_known_pos / abs(angle_to_last_known_pos) 
             else:
-                # Default slow spin search for target
-                cmd_vel.angular.z = max(0.0, cmd_vel.angular.z - 0.1)
-        else:
-            # Update the command based on the current pose
-            cmd_vel = self.controller()
-
-
+                # If there is no known last positin, turn in default direction
+                 cmd_vel.angular.z = max(0.0, cmd_vel.angular.z - 0.1)
+                
+            self.pub_control_cmd.publish(cmd_vel)
+            return
+        
+        # Get the current object pose in the robot base_footprint frame
         current_object_pose = self.get_current_object_pose()
         if current_object_pose is None:
             return
         
+        # TODO: get the control velocity command
         cmd_vel = self.controller()
         
+        # publish the control command
         self.pub_control_cmd.publish(cmd_vel)
-
         #################################################
     
     def controller(self):
@@ -259,9 +247,7 @@ class TrackingNode(Node):
         ########### Write your code here ###########
         
         # TODO: Update the control velocity command
-        if self.obj_pose is None:
-            return Twist()
-        
+
         distance = np.linalg.norm(self.obj_pose[:2])
         angle = math.atan2(self.obj_pose[1], self.obj_pose[0])
 
@@ -289,7 +275,18 @@ class TrackingNode(Node):
         cmd_vel.angular.z = max(min(angular_velocity, 1.0), -1.0)
         return cmd_vel
 
-   
+    def timer_update(self):
+        if self.obj_pose is not None:
+            cmd_vel = self.controller()
+            self.pub_control_cmd.publish(cmd_vel)
+        
+            
+       # self.get_logger().info(f"Distance: {distance}, Angle: {angle}")
+       # self.get_logger().info(f"Linear Gain: {linear_gain}, Angular Gain: {angular_gain}")
+        #self.get_logger().info(f"Command Velocity - Linear: {cmd_vel.linear.x}, Angular: {cmd_vel.angular.z}")
+        #self.get_logger().info(f"Angular Gain Factor: {angular_gain_factor}, Angle: {angle}, Angular Gain: {angular_gain}")
+        
+        return cmd_vel
     
         ############################################
 
