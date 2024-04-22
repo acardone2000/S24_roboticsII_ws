@@ -225,6 +225,10 @@ class TrackingNode(Node):
         else:
             # Update the command based on the current pose
             cmd_vel = self.controller()
+
+        current_object_pose = self.get_current_object_pose()
+        if current_object_pose is None:
+            return
         
         self.pub_control_cmd.publish(cmd_vel)
 
