@@ -239,6 +239,8 @@ class TrackingNode(Node):
         if current_object_pose is None:
             return
         
+        cmd_vel = self.controller()
+        
         self.pub_control_cmd.publish(cmd_vel)
 
         #################################################
