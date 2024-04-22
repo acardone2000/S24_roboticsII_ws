@@ -214,7 +214,7 @@ class TrackingNode(Node):
         # Now, the robot stops if the object is not detected
         # But, you may want to think about what to do in this case
         # and update the command velocity accordingly
-       if self.obj_pose is None:
+        if self.obj_pose is None:
             self.get_logger().info('No object pose detected.')
             cmd_vel = Twist()
             cmd_vel.linear.x = 0.0
