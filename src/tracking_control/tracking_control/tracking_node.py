@@ -111,6 +111,10 @@ class TrackingNode(Node):
         self.angular_last_error = 0.0
         self.angular_sum_error = 0.0
 
+        # Dynamic gain settings if needed
+        self.linear_gain_base = 0.5
+        self.angular_gain_base = 0.5
+
         self.stop_distance = 0.5  # Stop distance from the object
 
         
@@ -255,7 +259,9 @@ class TrackingNode(Node):
         ########### Write your code here ###########
         
         # TODO: Update the control velocity command
-        cmd_vel = Twist()
+        if self.obj_pose is None:
+            return Twist()
+        
         distance = np.linalg.norm(self.obj_pose[:2])
         angle = math.atan2(self.obj_pose[1], self.obj_pose[0])
 
