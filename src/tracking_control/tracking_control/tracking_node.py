@@ -271,8 +271,8 @@ class TrackingNode(Node):
 
         # Prepare and return the Twist message
         cmd_vel = Twist()
-        cmd_vel.linear.x = max(min(linear_velocity, 1.0), -1.0)  # Limiting max speed
-        cmd_vel.angular.z = max(min(angular_velocity, 1.0), -1.0)
+        cmd_vel.linear.x = max(min(linear_velocity, -1.0), 1.0)  # Limiting max speed
+        cmd_vel.angular.z = max(min(angular_velocity, -1.0), 1.0)
        
         # self.get_logger().info(f"Distance: {distance}, Angle: {angle}")
         # self.get_logger().info(f"Linear Gain: {linear_gain}, Angular Gain: {angular_gain}")
