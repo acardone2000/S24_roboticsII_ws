@@ -230,10 +230,13 @@ class TrackingNode(Node):
                 cmd_vel.angular.z = 0.3 * angle_to_last_known_pos / abs(angle_to_last_known_pos) if angle_to_last_known_pos != 0 else 0.3
             else:
                 # Default slow spin search for target
-                cmd_vel.angular.z = 0.1
+                cmd_vel.angular.z = max(0.0, cmd_vel.angular.z - 0.1)
         else:
             # Update the command based on the current pose
             cmd_vel = self.controller()
+
+        self.pub_control_cmd(cmd_vel)
+        return
 
         current_object_pose = self.get_current_object_pose()
         if current_object_pose is None:
