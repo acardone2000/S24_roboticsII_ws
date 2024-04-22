@@ -265,18 +265,7 @@ class TrackingNode(Node):
         cmd_vel.angular.z = max(min(angular_velocity, 1.0), -1.0)
         return cmd_vel
 
-    def timer_update(self):
-        if self.obj_pose is not None:
-            cmd_vel = self.controller()
-            self.pub_control_cmd.publish(cmd_vel)
-        
-            
-       # self.get_logger().info(f"Distance: {distance}, Angle: {angle}")
-       # self.get_logger().info(f"Linear Gain: {linear_gain}, Angular Gain: {angular_gain}")
-        #self.get_logger().info(f"Command Velocity - Linear: {cmd_vel.linear.x}, Angular: {cmd_vel.angular.z}")
-        #self.get_logger().info(f"Angular Gain Factor: {angular_gain_factor}, Angle: {angle}, Angular Gain: {angular_gain}")
-        
-        return cmd_vel
+   
     
         ############################################
 
