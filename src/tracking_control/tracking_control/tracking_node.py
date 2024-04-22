@@ -94,15 +94,23 @@ class TrackingNode(Node):
 
         # Last known object pose
         self.last_known_obj_pose = None
+
+
+        self.declare_parameter('linear_Kp', 0.5)
+        self.declare_parameter('linear_Ki', 0.1)
+        self.declare_parameter('linear_Kd', 0.05)
+        self.declare_parameter('angular_Kp', 0.5)
+        self.declare_parameter('angular_Ki', 0.1)
+        self.declare_parameter('angular_Kd', 0.02)
         
        # PID parameters for linear and angular control
-        self.linear_Kp = 0.5
-        self.linear_Ki = 0.1
-        self.linear_Kd = 0.05
+       # self.linear_Kp = 0.5
+       # self.linear_Ki = 0.1
+       # self.linear_Kd = 0.05
 
-        self.angular_Kp = 0.5
-        self.angular_Ki = 0.1
-        self.angular_Kd = 0.02
+       # self.angular_Kp = 0.5
+       # self.angular_Ki = 0.1
+       # self.angular_Kd = 0.02
 
         # Error states
         self.linear_last_error = 0.0
@@ -247,6 +255,12 @@ class TrackingNode(Node):
         ########### Write your code here ###########
         
         # TODO: Update the control velocity command
+        linear_Kp = self.get_parameter('linear_Kp').get_parameter_value().double_value
+        linear_Ki = self.get_parameter('linear_Ki').get_parameter_value().double_value
+        linear_Kd = self.get_parameter('linear_Kd').get_parameter_value().double_value
+        angular_Kp = self.get_parameter('angular_Kp').get_parameter_value().double_value
+        angular_Ki = self.get_parameter('angular_Ki').get_parameter_value().double_value
+        angular_Kd = self.get_parameter('angular_Kd').get_parameter_value().double_value
 
         distance = np.linalg.norm(self.obj_pose[:2])
         angle = math.atan2(self.obj_pose[1], self.obj_pose[0])
