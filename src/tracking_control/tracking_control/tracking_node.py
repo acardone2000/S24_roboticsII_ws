@@ -213,7 +213,7 @@ class TrackingNode(Node):
         # But, you may want to think about what to do in this case
         # and update the command velocity accordingly
         cmd_vel = Twist()
-       if self.obj_pose is None:
+        if self.obj_pose is None:
             # No current pose available, use last known pose to decide action
             if self.last_known_obj_pose is not None:
                 # Rotate towards the last known position
