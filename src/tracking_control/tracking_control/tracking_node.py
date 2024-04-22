@@ -95,14 +95,24 @@ class TrackingNode(Node):
         # Last known object pose
         self.last_known_obj_pose = None
         
-        #Dyamic linear gain
-        self.linear_gain_base = 0.5
-        
-        #Dynamic angular gain
-        self.angular_gain_base = 0.5
-        
-        #stop_distance
-        self.stop_distance = 0.5
+       # PID parameters for linear and angular control
+        self.linear_Kp = 0.5
+        self.linear_Ki = 0.1
+        self.linear_Kd = 0.05
+
+        self.angular_Kp = 0.4
+        self.angular_Ki = 0.1
+        self.angular_Kd = 0.02
+
+        # Error states
+        self.linear_last_error = 0.0
+        self.linear_sum_error = 0.0
+
+        self.angular_last_error = 0.0
+        self.angular_sum_error = 0.0
+
+        self.stop_distance = 0.5  # Stop distance from the object
+
         
         # ROS parameters
         self.declare_parameter('world_frame_id', 'odom')
@@ -238,43 +248,43 @@ class TrackingNode(Node):
         
         # TODO: Update the control velocity command
 
-        #Dynamic gain adjustment factor
-        linear_gain_factor = 0.3
-        angular_gain_factor = 0.5
+        distance = np.linalg.norm(self.obj_pose[:2])
+        angle = math.atan2(self.obj_pose[1], self.obj_pose[0])
 
-       
+        # PID for linear velocity
+        linear_error = max(distance - self.stop_distance, 0.0)
+        self.linear_sum_error += linear_error
+        linear_delta_error = linear_error - self.linear_last_error
+        self.linear_last_error = linear_error
+        linear_velocity = (self.linear_Kp * linear_error +
+                           self.linear_Ki * self.linear_sum_error +
+                           self.linear_Kd * linear_delta_error)
 
-        #Calculate distance and angle to the object
-        distance = np.linalg.norm(self.obj_pose[:2]) #distance based on x and y mesurments
-        angle = math.atan2(self.obj_pose[1], self.obj_pose[0]) #Angle to object
+        # PID for angular velocity
+        angular_error = angle
+        self.angular_sum_error += angular_error
+        angular_delta_error = angular_error - self.angular_last_error
+        self.angular_last_error = angular_error
+        angular_velocity = (self.angular_Kp * angular_error +
+                            self.angular_Ki * self.angular_sum_error +
+                            self.angular_Kd * angular_delta_error)
 
-        linear_gain = self.linear_gain_base + linear_gain_factor * (distance - self.stop_distance)
-        angular_gain = self.angular_gain_base + angular_gain_factor * abs(angle)
-
-        linear_gain=max(linear_gain, 0.1)
-        angular_gain = max(angular_gain, 0.1)
-        
+        # Prepare and return the Twist message
         cmd_vel = Twist()
+        cmd_vel.linear.x = max(min(linear_velocity, 1.0), -1.0)  # Limiting max speed
+        cmd_vel.angular.z = max(min(angular_velocity, 1.0), -1.0)
+        return cmd_vel
 
-        #Check if we are close enough to stop location
-        if distance > self.stop_distance:
-            # Adjust linear velocity based on distance, reduces speed as it gets closer
-            cmd_vel.linear.x = linear_gain * ( distance - self.stop_distance )
-
-            #Adjust angular velocity based on the angle, sharper turn for larger angles
-            cmd_vel.angular.z = angular_gain * angle
-        
-        else:
-            #Stop moving if close enough
-            cmd_vel.linear.x = 0
-            cmd_vel.angular.z =0
-
+    def timer_update(self):
+        if self.obj_pose is not None:
+            cmd_vel = self.controller()
+            self.pub_control_cmd.publish(cmd_vel)
         
             
-        self.get_logger().info(f"Distance: {distance}, Angle: {angle}")
-        self.get_logger().info(f"Linear Gain: {linear_gain}, Angular Gain: {angular_gain}")
-        self.get_logger().info(f"Command Velocity - Linear: {cmd_vel.linear.x}, Angular: {cmd_vel.angular.z}")
-        self.get_logger().info(f"Angular Gain Factor: {angular_gain_factor}, Angle: {angle}, Angular Gain: {angular_gain}")
+       # self.get_logger().info(f"Distance: {distance}, Angle: {angle}")
+       # self.get_logger().info(f"Linear Gain: {linear_gain}, Angular Gain: {angular_gain}")
+        #self.get_logger().info(f"Command Velocity - Linear: {cmd_vel.linear.x}, Angular: {cmd_vel.angular.z}")
+        #self.get_logger().info(f"Angular Gain Factor: {angular_gain_factor}, Angle: {angle}, Angular Gain: {angular_gain}")
         
         return cmd_vel
     
