@@ -184,27 +184,33 @@ class TrackingNode(Node):
         
     def get_current_object_pose(self):
         
+        if self.obj_pose is None:
+            self.get_logger().info("No object pose available.")
+            return None
+
         odom_id = self.get_parameter('world_frame_id').get_parameter_value().string_value
         # Get the current robot pose
         try:
-            # from base_footprint to odom
+         # from base_footprint to odom
             transform = self.tf_buffer.lookup_transform('base_footprint', odom_id, rclpy.time.Time())
             robot_world_x = transform.transform.translation.x
             robot_world_y = transform.transform.translation.y
             robot_world_z = transform.transform.translation.z
             robot_world_R = q2R([transform.transform.rotation.w, transform.transform.rotation.x, transform.transform.rotation.y, transform.transform.rotation.z])
-            if len(self.obj_pose) == 2:
-                self.obj_pose = np.append(self.obj_pose, 0)  # Append a zero if it's a 2-element vector
-            elif len(self.obj_pose) > 3:
-                self.obj_pose = self.obj_pose[:3]  # Truncate to 3 elements if it's longer
 
-            object_pose = robot_world_R @ self.obj_pose + np.array([robot_world_x, robot_world_y, robot_world_z])
-            
+            # Ensure self.obj_pose is a numpy array with at least length 3
+            if isinstance(self.obj_pose, np.ndarray) and self.obj_pose.shape[0] >= 3:
+                obj_pose_3d = self.obj_pose[:3]  # Use only the first three elements
+            else:
+                self.get_logger().error("Object pose is not in expected format.")
+                return None
+
+            object_pose = robot_world_R @ obj_pose_3d + np.array([robot_world_x, robot_world_y, robot_world_z])
+            return object_pose
+
         except TransformException as e:
             self.get_logger().error('Transform error: ' + str(e))
-            return 
-        
-        return object_pose
+            return None
     
     def timer_update(self):
         ################### Write your code here ###################
