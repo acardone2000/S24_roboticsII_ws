@@ -212,32 +212,22 @@ class TrackingNode(Node):
         # Now, the robot stops if the object is not detected
         # But, you may want to think about what to do in this case
         # and update the command velocity accordingly
-        if self.obj_pose is None:
-            cmd_vel = Twist()
-            cmd_vel.linear.x = 0.0
-            #Check if there is last know pose
+        cmd_vel = Twist()
+       if self.obj_pose is None:
+            # No current pose available, use last known pose to decide action
             if self.last_known_obj_pose is not None:
-                
-                # Determine the direction to turn based on last known position
+                # Rotate towards the last known position
                 angle_to_last_known_pos = math.atan2(self.last_known_obj_pose[1], self.last_known_obj_pose[0])
-                cmd_vel.angular.z = 0.3 * angle_to_last_known_pos / abs(angle_to_last_known_pos) 
+                cmd_vel.angular.z = 0.3 * angle_to_last_known_pos / abs(angle_to_last_known_pos) if angle_to_last_known_pos != 0 else 0.3
             else:
-                # If there is no known last positin, turn in default direction
-                 cmd_vel.angular.z = max(0.0, cmd_vel.angular.z - 0.1)
-                
-            self.pub_control_cmd.publish(cmd_vel)
-            return
+                # Default slow spin search for target
+                cmd_vel.angular.z = 0.1
+        else:
+            # Update the command based on the current pose
+            cmd_vel = self.controller()
         
-        # Get the current object pose in the robot base_footprint frame
-        current_object_pose = self.get_current_object_pose()
-        if current_object_pose is None:
-            return
-        
-        # TODO: get the control velocity command
-        cmd_vel = self.controller()
-        
-        # publish the control command
         self.pub_control_cmd.publish(cmd_vel)
+
         #################################################
     
     def controller(self):
@@ -247,7 +237,7 @@ class TrackingNode(Node):
         ########### Write your code here ###########
         
         # TODO: Update the control velocity command
-
+        cmd_vel = Twist()
         distance = np.linalg.norm(self.obj_pose[:2])
         angle = math.atan2(self.obj_pose[1], self.obj_pose[0])
 
