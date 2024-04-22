@@ -206,11 +206,14 @@ class TrackingNode(Node):
                 return None
 
             object_pose = robot_world_R @ obj_pose_3d + np.array([robot_world_x, robot_world_y, robot_world_z])
-            return object_pose
-
+            
         except TransformException as e:
-            self.get_logger().error('Transform error: ' + str(e))
-            return None
+                self.get_logger().error('Transform error: ' + str(e))
+                return None
+        
+        return object_pose
+
+       
     
     def timer_update(self):
         ################### Write your code here ###################
