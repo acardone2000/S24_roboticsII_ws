@@ -219,8 +219,8 @@ class TrackingNode(Node):
             cmd_vel = Twist()
             cmd_vel.linear.x = 0.0  # Stop any forward/backward movement
 
-             # Turn on the spot with a fixed angular velocity
-             cmd_vel.angular.z = 0.3  # Positive value turns one way, negative the other
+            # Turn on the spot with a fixed angular velocity
+            cmd_vel.angular.z = 0.3  # Positive value turns one way, negative the other
 
             self.pub_control_cmd.publish(cmd_vel)
             return  # Exit early as there's no object to process
