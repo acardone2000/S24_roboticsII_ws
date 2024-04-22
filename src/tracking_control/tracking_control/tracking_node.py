@@ -96,11 +96,11 @@ class TrackingNode(Node):
         self.last_known_obj_pose = None
         
        # PID parameters for linear and angular control
-        self.linear_Kp = 0.3
+        self.linear_Kp = 0.5
         self.linear_Ki = 0.1
         self.linear_Kd = 0.05
 
-        self.angular_Kp = 0.4
+        self.angular_Kp = 0.5
         self.angular_Ki = 0.1
         self.angular_Kd = 0.02
 
