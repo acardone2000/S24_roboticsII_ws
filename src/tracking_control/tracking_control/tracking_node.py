@@ -219,27 +219,24 @@ class TrackingNode(Node):
             cmd_vel = Twist()
             cmd_vel.linear.x = 0.0
             #Check if there is last know pose
-            if self.last_known_obj_pose is not None:
-                
-                # Determine the direction to turn based on last known position
-                angle_to_last_known_pos = math.atan2(self.last_known_obj_pose[1], self.last_known_obj_pose[0])
-                cmd_vel.angular.z = 0.3 * angle_to_last_known_pos / abs(angle_to_last_known_pos) 
-            else:
-                # If there is no known last positin, turn in default direction
-                 cmd_vel.angular.z = max(0.0, cmd_vel.angular.z - 0.1)
-                
-            self.pub_control_cmd.publish(cmd_vel)
-            return
-        
-        # Get the current object pose in the robot base_footprint frame
-        current_object_pose = self.get_current_object_pose()
-        if current_object_pose is None:
-            return
-        
-        # TODO: get the control velocity command
+            if self.obj_pose is None:
+                self.get_logger().info('No object pose detected.')
+                cmd_vel = Twist()
+                cmd_vel.linear.x = 0.0  # Stop any forward/backward movement
+
+                # Turn on the spot with a fixed angular velocity
+                cmd_vel.angular.z = 0.3  # Positive value turns one way, negative the other
+
+                self.pub_control_cmd.publish(cmd_vel)
+                return  # Exit early as there's no object to process
+
+            # Proceed if an object pose is detected
+            current_object_pose = self.get_current_object_pose()
+            if current_object_pose is None:
+                return  # Exit if no valid transformation could be found
+
+        # Calculate and publish the control command based on the current object pose
         cmd_vel = self.controller()
-        
-        # publish the control command
         self.pub_control_cmd.publish(cmd_vel)
         #################################################
     
