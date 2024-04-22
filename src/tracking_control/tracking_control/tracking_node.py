@@ -204,14 +204,16 @@ class TrackingNode(Node):
             else:
                 self.get_logger().error("Object pose is not in expected format.")
                 return None
-
+            
+            return object_pose
+        
             object_pose = robot_world_R @ obj_pose_3d + np.array([robot_world_x, robot_world_y, robot_world_z])
             
         except TransformException as e:
                 self.get_logger().error('Transform error: ' + str(e))
                 return None
         
-        return object_pose
+    
 
        
     
