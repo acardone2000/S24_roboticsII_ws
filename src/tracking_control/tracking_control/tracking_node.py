@@ -89,11 +89,6 @@ class TrackingNode(Node):
         super().__init__('tracking_node')
         self.get_logger().info('Tracking Node Started')
         
-        # Current object pose
-        self.obj_pose = None
-
-        # Last known object pose
-        self.last_known_obj_pose = None
         
        # PID parameters for linear and angular control
         self.linear_Kp = 0.5
@@ -273,19 +268,12 @@ class TrackingNode(Node):
         cmd_vel = Twist()
         cmd_vel.linear.x = max(min(linear_velocity, 1.0), -1.0)  # Limiting max speed
         cmd_vel.angular.z = max(min(angular_velocity, 1.0), -1.0)
-        return cmd_vel
-
-    def timer_update(self):
-        if self.obj_pose is not None:
-            cmd_vel = self.controller()
-            self.pub_control_cmd.publish(cmd_vel)
-        
-            
-       # self.get_logger().info(f"Distance: {distance}, Angle: {angle}")
-       # self.get_logger().info(f"Linear Gain: {linear_gain}, Angular Gain: {angular_gain}")
+       
+        # self.get_logger().info(f"Distance: {distance}, Angle: {angle}")
+        # self.get_logger().info(f"Linear Gain: {linear_gain}, Angular Gain: {angular_gain}")
         #self.get_logger().info(f"Command Velocity - Linear: {cmd_vel.linear.x}, Angular: {cmd_vel.angular.z}")
         #self.get_logger().info(f"Angular Gain Factor: {angular_gain_factor}, Angle: {angle}, Angular Gain: {angular_gain}")
-        
+
         return cmd_vel
     
         ############################################
